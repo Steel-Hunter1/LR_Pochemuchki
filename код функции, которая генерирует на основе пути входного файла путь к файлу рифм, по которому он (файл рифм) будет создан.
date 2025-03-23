@@ -1,0 +1,61 @@
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <Windows.h>
+using namespace std;
+
+string rhume_root(string root) // принимаем на вход путь к исходному файлу, 
+{
+    ifstream text_file(root); // открываем 
+
+    string file_extension = ".txt"; // удаляем расширение
+    int position = root.find(file_extension);
+    if (position != -1)
+    {
+        root.erase(position);
+    }
+   
+    root = root + "_rhymes"; // дописка к названию (значение опционально)
+    bool correct_name = false;
+    int i = 1;
+    do
+    {
+        ifstream rhume_file(root); // открываем файл на чтение
+        if (rhume_file) // если он существует, значит нельзя создавать выходной файл с таким именем
+        {
+            //================================================
+            // убираем неудачно добавленную цифру, если она была добавлена
+            position = root.find(" (" + to_string(i-1) + ")");
+            if (position != -1)
+            {
+                root.erase(position);
+            }
+            //================================================
+            rhume_file.close(); 
+       
+            root = root + " (" + to_string(i) + ")"; // дописываем число по порядку возрастанию
+
+        }
+        else // если файл не открылся, значит его нет. Значит имя подходит для работы
+        {
+            correct_name = true;
+        }
+        i++; // увеличиваем индекс, если файл с номером
+    } while (correct_name == false);// пока этот файл открывается, значит он существует, и поэтому его нельзя трогать.
+
+    return root + file_extension; // дописываем расширение
+}
+
+int main()
+{
+    //=================================
+    setlocale(LC_ALL, "Russian");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    setlocale(LC_ALL, "ru");
+    system("color F0");
+    //=================================
+    string jfjfjfj = "C://Users//andre//OneDrive//Рабочий стол//testing//простой файл";
+    cout << rhume_root(jfjfjfj);
+}
